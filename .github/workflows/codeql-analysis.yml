@@ -2,25 +2,27 @@ name: "Code scanning"
 
 on:
   schedule:
-    - cron: '0 8 * * 3'
+    - cron: '45 8 * * 4'
 
 jobs:
   CodeQL-Build:
 
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ref: [master, v0_10]
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+      with:
+        ref: ${{ matrix.ref }}
 
-    # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
       with:
         languages: java
 
-    # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
-    # If this step fails, then you should remove it and run the build manually (see below)
     - name: Autobuild
       uses: github/codeql-action/autobuild@v1
 
